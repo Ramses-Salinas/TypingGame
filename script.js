@@ -48,36 +48,39 @@ document.getElementById('start').addEventListener('click', () => {
     startTime = new Date().getTime();
 });
 
-typedValueElement.addEventListener('input', () => {
-    //Obtener la palabra actual
-    const currentWord = words[wordIndex];
-    //obtener el valor actual
-    const typedValue = typedValueElement.value;
+function empiezaElJuego() {
+    typedValueElement.addEventListener('input', () => {
+        //Obtener la palabra actual
+        const currentWord = words[wordIndex];
+        //obtener el valor actual
+        const typedValue = typedValueElement.value;
 
-    if (typedValue === currentWord && wordIndex === words.length - 1) {
+        if (typedValue === currentWord && wordIndex === words.length - 1) {
 
-        //Mostrar éxito
-        const elapsedTime = new Date().getTime() - startTime;
-        const message = `¡FELICIDADES! Terminaste en ${elapsedTime/1000} seconds.`;
-        messageElement.innerText = message;
-    } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
-        //final de la palabra
-        //borra el typedValueElement para la nueva palabra
-        typedValueElement.value = '';
-        //pasar a la siguiente palabra
-        wordIndex++;
-        //restablece el nombre de la clase para todos los elementos entre comillas
-        for (const wordElement of quoteElement.childNodes) {
-            wordElement.className = '';
+            //Mostrar éxito
+            const elapsedTime = new Date().getTime() - startTime;
+            const message = `¡FELICIDADES! Terminaste en ${elapsedTime/1000} seconds.`;
+            messageElement.innerText = message;
+            typedValueElement.removeEventListener();
+        } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
+            //final de la palabra
+            //borra el typedValueElement para la nueva palabra
+            typedValueElement.value = '';
+            //pasar a la siguiente palabra
+            wordIndex++;
+            //restablece el nombre de la clase para todos los elementos entre comillas
+            for (const wordElement of quoteElement.childNodes) {
+                wordElement.className = '';
+            }
+            //resaltar la nueva palabra
+            quoteElement.childNodes[wordIndex].className = 'highlight';
+        } else if (currentWord.startsWith(typedValue)) {
+            //Actualmente correcto
+            //Resalta la siguiente palabra
+            typedValueElement.className = '';
+        } else {
+            //estado de error 
+            typedValueElement.className = 'error';
         }
-        //resaltar la nueva palabra
-        quoteElement.childNodes[wordIndex].className = 'highlight';
-    } else if (currentWord.startsWith(typedValue)) {
-        //Actualmente correcto
-        //Resalta la siguiente palabra
-        typedValueElement.className = '';
-    } else {
-        //estado de error 
-        typedValueElement.className = 'error';
-    }
-});
+    });
+}
