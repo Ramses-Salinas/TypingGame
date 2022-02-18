@@ -17,6 +17,10 @@ let startTime = Date.now();
 const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
+const puntajes = document.getElementById('puntajes');
+let puntos = '';
+
+typedValueElement.disabled = true;
 
 document.getElementById('start').addEventListener('click', () => {
     //obtener una cita
@@ -40,16 +44,16 @@ document.getElementById('start').addEventListener('click', () => {
     //Configure el cuadro de texto
     //Borre el cuadro de texto
     typedValueElement.value = '';
+
+    typedValueElement.disabled = false;
+
     //establece el foco
     typedValueElement.focus();
     //establecer el controlador de eventos
 
     //Iniciar el temporizador
     startTime = new Date().getTime();
-    empiezaElJuego()
-});
 
-function empiezaElJuego() {
     typedValueElement.addEventListener('input', () => {
         //Obtener la palabra actual
         const currentWord = words[wordIndex];
@@ -59,9 +63,22 @@ function empiezaElJuego() {
         if (typedValue === currentWord && wordIndex === words.length - 1) {
 
             //Mostrar éxito
+            typedValueElement.value = '';
             const elapsedTime = new Date().getTime() - startTime;
             const message = `¡FELICIDADES! Terminaste en ${elapsedTime/1000} seconds.`;
             messageElement.innerText = message;
+
+            //typedValueElement.blur();
+            typedValueElement.disabled = true;
+            alert(message);
+
+            puntos = `${elapsedTime / 1000} ${puntos} `;
+            if (storageDisponible) {
+                localStorage.setItem('puntos', puntos);
+            }
+            cargaPuntaje();
+
+
             typedValueElement.removeEventListener();
         } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
             //final de la palabra
@@ -84,4 +101,29 @@ function empiezaElJuego() {
             typedValueElement.className = 'error';
         }
     });
+});
+
+function storageDisponible() {
+    try {
+        let x = '__storage_test__';
+        localStorage.setItem(x, x);
+        localStorage.removeItem(x);
+        return true;
+    } catch (ex) {
+        alert(`Error al acceder a la memoria local: ${ex}.`);
+        return false;
+    }
+}
+
+if (storageDisponible()) {
+    if (localStorage.length > 0) {
+        puntos = localStorage.getItem('puntos');
+        cargaPuntaje();
+    }
+}
+
+function cargaPuntaje() {
+    const vPuntos = puntos.split(' ');
+    const carga = vPuntos.map(function(num) { return `<p> ${num} </p>` });
+    puntajes.innerHTML = "<p>Puntajes:</p>" + carga.join('');
 }
