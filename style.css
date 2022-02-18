@@ -1,0 +1,31 @@
+.hifhlight {
+    background-color: yellow;
+}
+
+.error {
+    background-color: lightcoral;
+    border: red;
+}
+
+body {
+    background-color: chocolate;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 150%;
+}
+
+input {
+    position: absolute;
+    left: 30%;
+    width: 40%;
+    font-size: 130%;
+}
+
+button {
+    position: absolute;
+    margin-top: 12%;
+    width: 25%;
+    height: 5%;
+    left: 37.5%;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+}
