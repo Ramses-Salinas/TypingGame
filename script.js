@@ -46,6 +46,7 @@ document.getElementById('start').addEventListener('click', () => {
 
     //Iniciar el temporizador
     startTime = new Date().getTime();
+    empiezaElJuego()
 });
 
 function empiezaElJuego() {
